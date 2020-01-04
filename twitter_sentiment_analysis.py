@@ -25,7 +25,6 @@ def twitter_auth():
 
 # Retrieve Tweets
 def get_tweets():
-    # This function has been completed for you
     # It creates a Tweet list and extracts Tweets
     account = 'AWSSupport'  # You can change this to any Twitter account you wish
     extractor = twitter_auth() # Twitter handler object
@@ -42,7 +41,6 @@ def make_dataframe(tweets):
 
 # Pre-process Tweets
 def clean_tweets(data):
-    # This function has been completed for you
     # It pre-processes the text in the Tweets and runs in parallel
     spark = SparkSession\
     .builder\
@@ -56,7 +54,6 @@ def clean_tweets(data):
 def text_preprocess(tweet):
     # This function should return a Tweet that consists of only lowercase characters,
     # no hyperlinks or symbols, and has been stemmed or lemmatized
-    # Hint: use TextBlob and Word(tweet) and look up which functions you can call
     tweet = re.sub(r'https?:\/\/.*[\r\n]*', '', tweet)
     tweet = re.sub(r'#', '', tweet)
     tweet = re.sub(r'['+string.punctuation+']+', ' ', tweet)
@@ -67,7 +64,6 @@ def text_preprocess(tweet):
 
 # Retrieve sentiment of Tweets
 def generate_sentiment(data):
-    # This function has been completed for you
     # It returns the sentiment of the Tweets and runs in parallel
     spark = SparkSession\
     .builder\
@@ -102,9 +98,6 @@ def classify_tweets(data):
 
 # Create word cloud
 def create_word_cloud(classified_tweets) :
-    # Given the list of good, neutral, and bad Tweets,
-    # create a word cloud for each list
-    # Use different colors for each word cloud
     good_tweets = classified_tweets[0]
     neutral_tweets = classified_tweets[1]
     bad_tweets = classified_tweets[2]
@@ -118,22 +111,21 @@ def create_word_cloud(classified_tweets) :
 
 # Produce plot
 def produce_plot(cloud, name):
-    # This function has been completed for you
     matplotlib.pyplot.axis("off")
     matplotlib.pyplot.imshow(cloud, interpolation='bilinear')
     fig = matplotlib.pyplot.figure(1)
     fig.savefig(name)
     matplotlib.pyplot.clf()
 
-# Task 01: Retrieve Tweets
+#Retrieve Tweets
 tweets = get_tweets()
-# Task 02: Create dataframe 
+#Create dataframe 
 df = make_dataframe(tweets)
-# Task 03: Pre-process Tweets
+#Pre-process Tweets
 df['cleaned_tweets'] = df['Tweets'].apply(text_preprocess)
-# Task 04: Retrieve sentiments
+#Retrieve sentiments
 df['sentiment'] = df['cleaned_tweets'].apply(data_sentiment)
-# Task 05: Classify Tweets
+#Classify Tweets
 classified_tweets = classify_tweets(df)
-# Task 06: Create Word Cloud
+#Create Word Cloud
 create_word_cloud(classified_tweets)
